@@ -7,7 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const authorizationHeader = "Authorization"
+const (
+	authorizationHeader = "Authorization"
+	userCtx             = "userId"
+)
 
 func (h *Handler) userIdentity(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
@@ -21,4 +24,10 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		return
 	}
 
+	userId, err := h.services.ParseToken(headerParts[1])
+	if err != nil {
+		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	c.Set(userCtx, userId)
 }
