@@ -29,7 +29,7 @@ func (r *TodoItemPostgres) Create(listId int, todo todo.TodoItem) (int, error) {
 		return 0, err
 	}
 
-	createListItemsQuery := fmt.Sprintf("INSERT INTO %s (list_id, item_id) VALUES($1, $2)")
+	createListItemsQuery := fmt.Sprintf("INSERT INTO %s (list_id, item_id) VALUES($1, $2)", listsItemsTable)
 	if _, err := tx.Exec(createListItemsQuery, listId, idItem); err != nil {
 		tx.Rollback()
 		return 0, err
